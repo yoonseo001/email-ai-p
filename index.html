@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AI-Assisted Email Writing Study</title>
+<style>
+/* 자극물 화면(261107)과 같은 글꼴·색을 써서 과업과 설문이 한 화면처럼 이어지게 한다. */
+:root{--bg:#f3f5f8;--card:#fff;--ink:#253044;--ink-2:#4d5c71;--ink-3:#7a879a;--line:#dfe5ed;--line-2:#edf0f4;--blue:#365fb3;--blue-soft:#edf4ff;--blue-line:#c6d4e6;--bad:#b3372f;--bad-soft:#fdf0ee;--ok:#1f7a5c;color-scheme:light}
+*{box-sizing:border-box}
+html{font-size:16.6667px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.8;overflow-wrap:anywhere}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.45}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid #a4bcec;outline-offset:2px}
+
+.shell{width:min(100% - 32px,860px);margin:0 auto;padding:22px 0 56px}
+.shell.wide{width:min(100% - 32px,1048px)}
+.banner{background:#fff6d9;border:1px solid #ecd58a;color:#6b5200;border-radius:8px;padding:8px 14px;font-size:.84rem;margin-bottom:14px;line-height:1.6}
+.progress{height:6px;border-radius:3px;background:#e2e7ef;overflow:hidden;margin-bottom:22px}
+.progress b{display:block;height:100%;background:var(--blue);transition:width .25s}
+@media(prefers-reduced-motion:reduce){.progress b{transition:none}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 30px;margin-bottom:18px}
+.card.head{border-top:8px solid var(--blue)}
+.card h1{font-size:1.38rem;line-height:1.45;margin:0 0 14px;letter-spacing:-.5px}
+.card h2{font-size:1.14rem;line-height:1.5;margin:0 0 12px;letter-spacing:-.3px}
+.card p{margin:0 0 12px}
+.card p:last-child{margin-bottom:0}
+.card .contact{margin-top:16px;padding-top:14px;border-top:1px solid var(--line-2);font-size:.9rem;color:var(--ink-2)}
+.section-title{font-size:.88rem;font-weight:600;color:#657186;letter-spacing:.04em;margin:0 0 8px}
+.lead{color:var(--ink-2);margin:0 0 16px}
+.lead p{margin:0 0 8px}
+
+.q{display:flex;flex-direction:column;gap:6px}
+.q-text{font-weight:600;line-height:1.65;margin:0 0 8px}
+.q-hint{font-weight:400;font-size:.84rem;color:var(--ink-3);margin-left:6px;white-space:nowrap}
+.q-note{font-size:.86rem;color:var(--ink-3);margin:10px 0 0;line-height:1.6}
+.opt{display:flex;gap:11px;align-items:flex-start;padding:8px 12px;border-radius:8px;cursor:pointer;border:1px solid transparent}
+.opt:hover{background:#f6f8fc}
+.opt input{margin:6px 0 0;width:18px;height:18px;accent-color:var(--blue);flex:none}
+.opt:has(input:checked){background:var(--blue-soft);border-color:#cfdcf3}
+.opt .other{margin-left:8px;border:0;border-bottom:1px solid #b9c4d6;background:transparent;padding:2px 4px;min-width:0;width:min(220px,50vw)}
+.num-row{display:flex;align-items:center;gap:8px}
+.num-row input{width:110px;border:1px solid #c9d3e2;border-radius:7px;padding:7px 10px;background:#fff}
+textarea.free{display:block;width:100%;min-height:140px;border:1px solid #c9d3e2;border-radius:8px;padding:12px 14px;line-height:1.7;resize:vertical;background:#fff}
+.card.missing{border-color:#e3a39d;background:var(--bad-soft)}
+.field-error{color:var(--bad);font-size:.9rem;margin:8px 0 0;line-height:1.5}
+.num-row input[aria-invalid="true"]{border-color:var(--bad);box-shadow:0 0 0 2px #f6d3cf}
+
+.scenario{background:#fafbfd;border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin:14px 0 0}
+.guide ol{margin:0 0 12px;padding-left:1.35em}
+.guide li{margin:6px 0}
+.guide .notes{color:var(--ink-2);font-size:.94rem;border-top:1px solid var(--line-2);padding-top:12px;margin:0}
+details.again{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:18px}
+details.again>summary{padding:14px 22px;cursor:pointer;color:var(--blue);font-weight:600;list-style:none}
+details.again>summary::-webkit-details-marker{display:none}
+details.again>summary:after{content:' ⌄'}
+details.again[open]>summary:after{content:' ⌃'}
+details.again .inner{padding:0 22px 20px}
+
+/* 7점 척도 격자 */
+.scale-key{font-size:.84rem;color:var(--ink-3);margin:0 0 14px;line-height:1.7}
+.lk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:18px}
+.lk-row{display:grid;grid-template-columns:minmax(0,1fr) 406px;gap:14px;align-items:center;padding:13px 22px;border-bottom:1px solid var(--line-2)}
+.lk-row:last-child{border-bottom:0;border-radius:0 0 12px 12px}
+.lk-row.block-start{border-top:8px solid var(--bg)}
+.lk-row.missing{background:var(--bad-soft)}
+.lk-row.lk-lead{grid-template-columns:minmax(0,1fr);background:#f8f9fc;color:var(--ink-2);font-size:.94rem;font-weight:600;line-height:1.6}
+.lk-head{position:sticky;top:0;z-index:2;background:#f6f8fc;border-bottom:1px solid var(--line);border-radius:12px 12px 0 0;padding-block:8px}
+.lk-head .lk-opts span{font-size:1.1rem;line-height:1.4;color:var(--ink-2);text-align:center}
+.lk-text{white-space:pre-line;line-height:1.65}
+.lk-opts{display:grid;grid-template-columns:repeat(7,58px)}
+.lk-opts label{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0;cursor:pointer;border-radius:8px}
+.lk-opts label:hover{background:#f0f4fb}
+.lk-opts input{width:19px;height:19px;margin:0;accent-color:var(--blue)}
+.lk-opts label i{font-style:normal;font-size:.72rem;color:var(--ink-3);display:none;font-variant-numeric:tabular-nums}
+@media(max-width:800px){
+  .lk-head{display:none}
+  .lk-row{grid-template-columns:minmax(0,1fr);gap:8px;padding:14px 16px}
+  .lk-opts{grid-template-columns:repeat(7,1fr)}
+  .lk-opts label i{display:block}
+  .lk{border-radius:12px;overflow:hidden}
+}
+
+.actions{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px}
+.msg{font-size:.9rem;line-height:1.6;min-height:1.6em;margin:0;flex:1;min-width:0}
+.msg.bad{color:var(--bad)} .msg.ok{color:var(--ok)}
+.btn{background:var(--blue);color:#fff;border:1px solid var(--blue);border-radius:8px;padding:11px 26px;font-size:.94rem;font-weight:600;line-height:1.5}
+.btn.secondary{background:#fff;color:#466082;border-color:var(--blue-line);font-weight:500}
+
+/* 과업(자극물) 영역 */
+#stimFrame{display:block;width:100%;border:0;min-height:560px;background:transparent}
+.task-next{background:var(--card);border:2px solid #668ed4;border-radius:12px;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:4px}
+.task-next p{margin:0;flex:1;min-width:0}
+@media(max-width:640px){.card{padding:20px 18px}.shell,.shell.wide{width:calc(100% - 20px)}}
+</style>
+</head>
+<body>
+<main id="app" class="shell"><noscript>This survey requires JavaScript. Please enable JavaScript in your browser.</noscript></main>
+<script src="config.js"></script>
+<script src="survey.js"></script>
+<script src="stimulus.js"></script>
+<script>
+// Supabase 설정이 비어 있거나 주소에 ?preview=1 이 있으면 미리보기용 제안문을 불러온다.
+(function(){var c=window.STUDY_CONFIG||{};if(!c.SUPABASE_URL||!c.SUPABASE_KEY||/[?&]preview=1/.test(location.search)){document.write('<script src="preview-data.js"><\/script>')}})();
+</script>
+<script src="app.js"></script>
+</body>
+</html>
