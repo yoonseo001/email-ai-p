@@ -1,19 +1,20 @@
 // ─────────────────────────────────────────────────────────────
-// Items and on-screen text (source: 장윤서-설문지 영문-261116.docx)
+// Items and on-screen text (source: (수정본) Written Interview-Study2 Materials.docx, 261119)
+// Inline format: **bold**, __underline__. Sentences are shown on separate lines automatically.
 // To change any wording, edit this file only. "code" is the item code saved in the database; participants never see it.
 // ─────────────────────────────────────────────────────────────
 window.SURVEY = {
-  version: "survey-en-261116-p1",
+  version: "survey-en-261119-p1",
   lang: "en",
 
-  title: "A Study on User Experience with AI-Assisted Email Writing",
+  title: "User Experience with AI-Assisted Email Writing",
 
   // {reward} is replaced with REWARD in config.js
   intro: [
     "Hello,",
     "The Graduate School of Information at Yonsei University is conducting research on users' experiences with generative AI email writing assistance. The purpose of this study is to examine how users behave and how they evaluate an AI feature when using it to write an email.",
     "If you choose to participate, you will complete an email-writing task using an AI feature in a hypothetical scenario and then complete a survey about your experience. The email you write will not actually be sent.",
-    "The study takes approximately 10 minutes to complete. You will receive {reward} through Prolific for completing the study. Participation is voluntary, and you may stop at any time.",
+    "The study takes approximately **10 minutes to complete.** You will receive {reward} through Prolific for completing the study. Participation is voluntary, and you may stop at any time.",
     "If you have any questions about the study, please use the contact information below or send a message through Prolific.",
     "Thank you."
   ],
@@ -21,14 +22,14 @@ window.SURVEY = {
 
   // One question per screen; choosing exitOn ends the survey
   screening: [
-    { code: "SQ1", text: "Are you 18 years of age or older?", options: ["Yes", "No"], exitOn: "2" },
+    { code: "SQ1", text: "Are you 18 or older?", options: ["Yes", "No"], exitOn: "2" },
     { code: "SQ2", text: "In the past 6 months, have you personally written and sent an email for work or school?", options: ["Yes", "No"], exitOn: "2" }
   ],
 
   consent: {
     heading: "Consent to Participate and to the Collection and Use of Data",
     body: [
-      "In this study, we will collect your Prolific ID, the text of the email you write, usage records such as task completion time and edits, and your survey responses. We will not collect your name, phone number, or personal email address. Please do not include any personal information or confidential work information in the email you write.",
+      "In this study, we will collect your Prolific ID, the text of the email you write, usage records such as task completion time and edits, and your survey responses. We will not collect your name, phone number, or personal email address. Please do not include any personal information or confidential work-related information in the email you write.",
       "The data collected will be managed under a research identification code and used for a master's thesis and related academic research. No personally identifiable information will be disclosed when the results are reported."
     ],
     question: "Have you read and understood the information above, and do you voluntarily agree to participate in this study and to the collection and use of your data?",
@@ -39,21 +40,21 @@ window.SURVEY = {
     heading: "Main Experiment",
     lead: [
       "You will now be presented with an email writing scenario.",
-      "On the next screen, please read the scenario and imagine that you are actually in this situation.",
-      "You will then write an email using an AI writing assistance feature. Please review the steps below before you start."
+      "Please read the information below and imagine that you are actually in this situation.",
+      "On the following screen, you will write an email using an AI writing assistance feature."
     ],
     scenarioHeading: "Common Instructions",
     scenario: [
       "You are a workshop coordinator at a professional training center, and you are preparing the \"Career Skills Workshop.\"",
-      "The guest speaker, Jordan Bennett, agreed to send the presentation slides by Monday, September 14, but as of Tuesday, September 15, the slides have not arrived. To prepare for the workshop, you need to receive the slides by Wednesday, September 16.",
-      "Jordan Bennett is an outside expert with whom you may work again in the future. Please complete a polite follow-up email that clearly states when you need the slides, without blaming the speaker or putting undue pressure on them.",
-      "First, please review the previous emails from the speaker and from a colleague at your training center. You will then use the provided draft and the AI writing assistance feature on the writing screen."
+      "The guest speaker, Jordan Bennett, agreed to send the presentation slides by Monday, September 14, but as of Tuesday, September 15, the slides have not arrived. To prepare for the workshop, **you need to receive the slides by Wednesday, September 16.**",
+      "Jordan Bennett is an outside expert with whom you may work again in the future. Please write a polite follow-up email that clearly states when you need the slides, without blaming the speaker or putting undue pressure on them.",
+      "First, please review the previous emails from the speaker and a colleague from your training center. You will then use the provided draft and the AI writing assistance feature on the writing screen."
     ],
     guideHeading: "Task Instructions",
     guideSteps: [
       "Read the task description and the two previous emails, and then click the 'Write Email' button.",
       "Review the draft on the writing screen, and then click the AI writing assistance button.",
-      "Read the AI suggestion shown in the body of the email, and then click the 'Apply and Edit' button. You must apply the AI suggestion once.",
+      "Read the AI suggestion shown in the body of the email, and then click the 'Apply and Edit' button. **You __must__ apply the AI suggestion once.**",
       "After applying it, feel free to edit or delete any part of the text to complete the email. You may also keep the AI-suggested content as it is.",
       "If needed, you can use 'View AI Suggestion Again,' 'View Original Draft,' and 'View 2 Previous Emails Again.'",
       "When you have finished the email, click the 'Done' button."
@@ -76,8 +77,8 @@ window.SURVEY = {
   likert: {
     heading: "Evaluation of Your Experience with the Email Writing Assistance Feature",
     lead: [
-      "Please indicate how much you agree or disagree with each statement based on your experience with the AI feature during the email-writing task.",
-      "There are no right or wrong answers."
+      "**Please indicate how much you agree or disagree with each statement based on your experience with the AI feature during the email-writing task.**",
+      "**There are no right or wrong answers.**"
     ],
     scale: ["Strongly disagree", "Disagree", "Somewhat disagree", "Neither agree nor disagree", "Somewhat agree", "Agree", "Strongly agree"],
     // One screen = one array. "block" is the saved code prefix and is not shown. "lead" is shown as a line above that block.
@@ -94,21 +95,21 @@ window.SURVEY = {
           "As a result of using the AI feature, the wording of the final email became more natural.",
           "As a result of using the AI feature, the tone of the final email became more appropriate for the situation.",
           "As a result of using the AI feature, the sentences in the final email became clearer.",
-          "As a result of using the AI feature, the wording of the final email became more professionally polished.",
-          "As a result of using the AI feature, I felt that the wording of the final email improved overall."
+          "As a result of using the AI feature, the wording of the final email became more professional.",
+          "Overall, the wording of the final email improved."
         ]}
       ],
       [
         { block: "CID", items: [
-          "This AI feature helped the ideas in the final email flow naturally.",
+          "This AI feature helped to improve the flow of ideas in the final email.",
           "This AI feature helped organize the key points of the final email logically.",
           "This AI feature helped the final email better reflect what I intended to convey.",
-          "This AI feature helped convey the purpose of the email more clearly to the recipient.",
+          "This AI feature helped communicate the purpose of the email more effectively to the recipient.",
           "This AI feature helped ensure that the final email included all the necessary information."
         ]},
         { block: "BUR", items: [
-          "I found it burdensome to revise the wording suggested by the AI.",
-          "It was cumbersome to adjust the AI-suggested content to fit the flow of the email.",
+          "Revising the wording suggested by the AI felt burdensome.",
+          "Adjusting the AI-suggested content to fit the flow of the email was cumbersome.",
           "I found it burdensome to adjust the tone of the AI-suggested text.",
           "It was cumbersome to revise the AI-suggested content to match what I meant to convey.",
           "It was burdensome to have to fix unnecessary or inappropriate parts of the AI suggestion.",
@@ -126,7 +127,7 @@ window.SURVEY = {
         { block: "DIS", items: [
           "I felt uncomfortable with the AI using email information.",
           "I felt that the AI used more information than necessary to write the email.",
-          "I felt that the AI used too much email information.",
+          "I felt that the AI used more email information than I was comfortable with.",
           "I felt that the range of email information the AI used was too wide.",
           "I felt that the AI’s use of email information went beyond what I considered acceptable."
         ]}
@@ -153,7 +154,7 @@ window.SURVEY = {
       [
         { block: "BI", items: [
           "I intend to use this AI feature when writing emails in the future.",
-          "I predict that I will use this AI feature when writing emails in the future.",
+          "I expect to use this AI feature when writing emails in the future.",
           "I plan to use this AI feature when writing emails in the future.",
           "I am likely to use this AI feature when writing emails in the future.",
           "If this AI feature were available to me, I would actively use it when writing emails."
@@ -167,7 +168,7 @@ window.SURVEY = {
         { block: "SAT", items: [
           "I am very satisfied with this AI feature.",
           "I am very pleased with this AI feature.",
-          "I am very content with this AI feature."
+          "Overall, I am satisfied with this AI feature."
         ]}
       ]
     ]
@@ -189,11 +190,11 @@ window.SURVEY = {
     lead: "The following questions are about your usual experience with email and generative AI. Please read each question and select the response that best reflects your actual experience.",
     questions: [
       { code: "BQ1", type: "single", text: "In the past 3 months, how often have you personally written and sent emails?",
-        options: ["Almost every day", "3-4 days a week", "1-2 days a week", "1-3 days a month", "Less than once a month"] },
+        options: ["Daily or almost daily (5–7 days per week)", "2–4 days per week", "About once a week", "Less than once a week", "Not at all in the past three months"] },
       { code: "BQ2", type: "multi", text: "In the past 3 months, for what purposes have you mainly used email?", hint: "Select all that apply",
         options: ["Work-related communication", "School- or research-related communication", "Personal matters", "Other (please specify)"], otherIndex: 4, otherCode: "BQ2_ETC" },
       { code: "BQ3", type: "single", text: "In the past 3 months, how often have you used generative AI services (e.g., ChatGPT, Gemini, Claude, Copilot)?",
-        options: ["Almost every day", "3-4 days a week", "1-2 days a week", "1-3 days a month", "Less than once a month", "I have not used them"] },
+        options: ["Daily or almost daily (5–7 days per week)", "2–4 days per week", "About once a week", "Less than once a week", "I have not used them"] },
       { code: "BQ4", type: "single", text: "In the past 3 months, how many times have you used generative AI to write or revise an email?",
         options: ["Never", "1-2 times", "3-5 times", "6-10 times", "11 or more times"] }
     ]
@@ -203,10 +204,10 @@ window.SURVEY = {
     heading: "Demographic Information",
     lead: "",
     questions: [
-      { code: "DQ1", type: "single", text: "What is your gender?", options: ["Male", "Female", "Prefer not to answer"] },
-      { code: "DQ2", type: "number", text: "What is your current age?", unit: "years old", min: 18, max: 99 },
-      { code: "DQ3", type: "single", text: "What is the highest level of education you have completed?", options: ["High school or less", "Some college", "Bachelor's degree", "Graduate degree"] },
-      { code: "DQ4", type: "single", text: "What is your current employment status?",
+      { code: "DQ1", type: "single", text: "What is your __gender__?", options: ["Male", "Female", "Prefer not to answer"] },
+      { code: "DQ2", type: "number", text: "What is your current __age__?", unit: "years old", min: 18, max: 99 },
+      { code: "DQ3", type: "single", text: "What is the __highest level of education__ you have completed?", options: ["High school or less", "Some college, but no degree", "Associate degree", "Bachelor's degree", "Graduate degree"] },
+      { code: "DQ4", type: "single", text: "What is your current __employment status__?",
         options: ["Employed full-time", "Employed part-time", "Self-employed or freelance", "Not employed and looking for work", "Not employed and not looking for work", "Prefer not to answer"],
         note: "※ If more than one option applies, please select the one that reflects your main job. If you are a student who is currently working, please select the type of employment that applies to you." }
     ]

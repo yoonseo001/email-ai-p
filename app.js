@@ -36,7 +36,22 @@
     for (const kid of kids.flat(Infinity)) { if (kid == null || kid === false) continue; el.append(kid.nodeType ? kid : document.createTextNode(kid)); }
     return el;
   }
-  const paras = list => list.map(t => h('p', { text: t }));
+  // 화면 문구 표시: **굵게**, __밑줄__ 을 적용하고, 문장이 끝나면 줄을 바꾼다.
+  const SENT_BREAK = /([.?!]["'”’)]?(?:\*\*|__)*)[ \t]+(?=(?:\*\*|__)*["“‘'(]?[A-Z0-9])/g;
+  function rich(str) {
+    const root = document.createDocumentFragment(), stack = [root];
+    String(str == null ? '' : str).replace(SENT_BREAK, '$1\n').split(/(\*\*|__)/).forEach(tok => {
+      const top = stack[stack.length - 1];
+      if (tok === '**' || tok === '__') {
+        const tag = tok === '**' ? 'STRONG' : 'U';
+        if (top.nodeName === tag) stack.pop(); else { const el = document.createElement(tag); top.append(el); stack.push(el); }
+        return;
+      }
+      tok.split('\n').forEach((line, i) => { if (i) top.append(document.createElement('br')); if (line) top.append(line); });
+    });
+    return root;
+  }
+  const paras = list => list.map(t => h('p', null, rich(t)));
   let closed = false; // 종료 화면에 도달하면 브라우저 보관분을 지우고 더 이상 보관하지 않는다
   function persist() { if (!state || closed) return; try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* 보관 실패 시에도 진행 */ } }
   function clearLocal() { try { localStorage.removeItem(KEY); } catch (e) { } }
@@ -216,18 +231,18 @@
   function singleCard(q) {
     const name = 'q_' + q.code;
     const card = h('div', { class: 'card q', 'data-code': q.code },
-      h('p', { class: 'q-text' }, q.text, h('span', { class: 'q-hint', text: '[' + (q.hint || U.selectOne) + ']' })),
+      h('p', { class: 'q-text' }, rich(q.text), h('span', { class: 'q-hint', text: '[' + (q.hint || U.selectOne) + ']' })),
       q.options.map((o, i) => h('label', { class: 'opt' },
         h('input', { type: 'radio', name, id: name + '_' + (i + 1), value: String(i + 1), checked: draftOf(q.code) === String(i + 1), onchange: () => { card.classList.remove('missing'); setDraft(q.code, String(i + 1)); } }),
         h('span', { text: o }))),
-      q.note ? h('p', { class: 'q-note', text: q.note }) : null);
+      q.note ? h('p', { class: 'q-note' }, rich(q.note)) : null);
     card.read = () => { const c = card.querySelector('input:checked'); return c ? [{ code: q.code, value: c.value }] : null; };
     return card;
   }
   function guideNodes(withScenario = true) {
     const T = S.taskIntro;
     return [withScenario && h('div', { class: 'scenario' }, T.scenarioHeading ? h('p', { class: 'section-title', text: T.scenarioHeading }) : null, paras(T.scenario)),
-      h('div', { class: 'guide', style: 'margin-top:18px' }, h('h2', { text: T.guideHeading }), h('ol', null, T.guideSteps.map(t => h('li', { text: t }))), h('p', { class: 'notes' }, T.guideNotes.map((t, i) => [i ? h('br') : null, t])))];
+      h('div', { class: 'guide', style: 'margin-top:18px' }, h('h2', { text: T.guideHeading }), h('ol', null, T.guideSteps.map(t => h('li', null, rich(t)))), h('p', { class: 'notes' }, T.guideNotes.map((t, i) => [i ? h('br') : null, rich(t)])))];
   }
 
   // ── 각 화면 ──────────────────────────────────────────────────
@@ -331,7 +346,7 @@
       const A = S.aq1, card = singleCard(A);
       const again = h('details', { class: 'again', ontoggle: e => { if (e.target.open) logEvent('task_guide_reopened', { page: 'aq1' }); } }, h('summary', { text: U.guideAgain }), h('div', { class: 'inner' }, guideNodes()));
       const bar = actions(U.next, () => { const v = card.read(); if (!v) { card.classList.add('missing'); bar.say(U.missingOne, 'bad'); return; } submit('aq1', v, nextOf('aq1'), bar); });
-      app.append(again, h('div', { class: 'lead' }, h('p', { text: A.lead })), card, bar.el);
+      app.append(again, h('div', { class: 'lead' }, h('p', null, rich(A.lead))), card, bar.el);
     },
 
     end() {
@@ -340,7 +355,7 @@
       const done = () => {
         finalRecord = finalRecord || JSON.parse(JSON.stringify(state)); delete finalRecord.token;
         closeLocal();
-        box.replaceChildren(h('h1', { text: E.heading }), h('p', { text: E.body }));
+        box.replaceChildren(h('h1', { text: E.heading }), h('p', null, rich(E.body)));
         if (CFG.PROLIFIC_COMPLETE_URL && !TEST && !PREVIEW) {
           box.append(h('p', null, h('a', { class: 'btn', href: CFG.PROLIFIC_COMPLETE_URL, text: U.toProlific, style: 'display:inline-block;text-decoration:none' })));
           setTimeout(() => { location.href = CFG.PROLIFIC_COMPLETE_URL; }, 3000);
@@ -361,7 +376,7 @@
   };
   function exitView(T, url) {
     flushEvents(); closeLocal();
-    const box = h('div', { class: 'card head' }, h('h1', { text: T.heading }), h('p', { text: T.body }));
+    const box = h('div', { class: 'card head' }, h('h1', { text: T.heading }), h('p', null, rich(T.body)));
     if (url && !TEST && !PREVIEW) box.append(h('p', null, h('a', { class: 'btn', href: url, text: U.toProlific, style: 'display:inline-block;text-decoration:none' })));
     app.append(box);
   }
@@ -383,10 +398,10 @@
     let order = LIKERT.slice(0, pi).reduce((n, pg) => n + pg.reduce((m, b) => m + b.items.length, 0), 0);
     const head = h('div', { class: 'lk-row lk-head', 'aria-hidden': 'true' }, h('span'), h('div', { class: 'lk-opts' }, L.scale.map((s, i) => h('span', { text: '①②③④⑤⑥⑦'[i] }))));
     const grid = h('div', { class: 'lk' }, head), rows = [];
-    blocks.forEach((b, bi) => { if (b.lead) grid.append(h('div', { class: 'lk-row lk-lead' + (bi > 0 ? ' block-start' : '') }, h('span', { text: b.lead }))); b.items.forEach((text, ii) => {
+    blocks.forEach((b, bi) => { if (b.lead) grid.append(h('div', { class: 'lk-row lk-lead' + (bi > 0 ? ' block-start' : '') }, h('span', null, rich(b.lead)))); b.items.forEach((text, ii) => {
       const code = b.single ? b.block : b.block + (ii + 1), name = 'q_' + code, ord = ++order;
       const row = h('div', { class: 'lk-row' + (ii === 0 && bi > 0 && !b.lead ? ' block-start' : ''), role: 'radiogroup', 'aria-label': text },
-        h('span', { class: 'lk-text', text }),
+        h('span', { class: 'lk-text' }, rich(text)),
         h('div', { class: 'lk-opts' }, L.scale.map((s, i) => h('label', { title: s },
           h('input', { type: 'radio', name, id: name + '_' + (i + 1), value: String(i + 1), 'aria-label': (i + 1) + ' ' + s, checked: draftOf(code) === String(i + 1), onchange: () => { row.classList.remove('missing'); setDraft(code, String(i + 1)); } }),
           h('i', { text: String(i + 1) })))));
@@ -414,7 +429,7 @@
         const saved = (draftOf(q.code) || '').split('|').filter(Boolean);
         const other = h('input', { type: 'text', class: 'other', id: 'q_' + q.otherCode, 'aria-label': U.otherLabel, value: draftOf(q.otherCode) || '', oninput: e => setDraft(q.otherCode, e.target.value) });
         const boxes = q.options.map((o, i) => h('input', { type: 'checkbox', id: 'q_' + q.code + '_' + (i + 1), value: String(i + 1), checked: saved.includes(String(i + 1)), onchange: () => { card.classList.remove('missing'); setDraft(q.code, boxes.filter(b => b.checked).map(b => b.value).join('|')); } }));
-        card = h('div', { class: 'card q', 'data-code': q.code }, h('p', { class: 'q-text' }, q.text, h('span', { class: 'q-hint', text: '[' + q.hint + ']' })),
+        card = h('div', { class: 'card q', 'data-code': q.code }, h('p', { class: 'q-text' }, rich(q.text), h('span', { class: 'q-hint', text: '[' + q.hint + ']' })),
           q.options.map((o, i) => h('label', { class: 'opt' }, boxes[i], h('span', null, o, i + 1 === q.otherIndex ? other : null))));
         other.addEventListener('focus', () => { const b = boxes[q.otherIndex - 1]; if (!b.checked) { b.checked = true; b.dispatchEvent(new Event('change')); } });
         card.read = () => { const sel = boxes.filter(b => b.checked).map(b => b.value); if (!sel.length) return null; const out = [{ code: q.code, value: sel.join('|') }]; if (sel.includes(String(q.otherIndex))) out.push({ code: q.otherCode, value: other.value.trim() }); return out; };
@@ -423,7 +438,7 @@
         const err = h('p', { class: 'field-error', id: 'err_' + q.code, role: 'alert', hidden: true });
         const input = h('input', { type: 'text', id: 'q_' + q.code, inputmode: 'numeric', autocomplete: 'off', maxlength: 3, 'aria-describedby': 'err_' + q.code, value: draftOf(q.code) || '',
           oninput: e => { card.classList.remove('missing'); err.hidden = true; input.removeAttribute('aria-invalid'); setDraft(q.code, e.target.value); } });
-        card = h('div', { class: 'card q', 'data-code': q.code }, h('label', { class: 'q-text', for: 'q_' + q.code, text: q.text }), h('div', { class: 'num-row' }, input, h('span', { text: q.unit || '' })), err);
+        card = h('div', { class: 'card q', 'data-code': q.code }, h('label', { class: 'q-text', for: 'q_' + q.code }, rich(q.text)), h('div', { class: 'num-row' }, input, h('span', { text: q.unit || '' })), err);
         card.read = () => {
           const v = input.value.trim();
           const msg = v === '' ? U.ageEmpty : !/^[0-9]+$/.test(v) ? U.ageDigits : (+v < q.min || +v > q.max) ? U.ageRange(q.min, q.max) : '';
@@ -433,7 +448,7 @@
         card.inline = true;
       } else {
         const ta = h('textarea', { class: 'free', id: 'q_' + q.code, maxlength: 3000, oninput: e => setDraft(q.code, e.target.value) }); ta.value = draftOf(q.code) || '';
-        card = h('div', { class: 'card q', 'data-code': q.code }, h('label', { class: 'q-text', for: 'q_' + q.code }, q.text, q.hint ? h('span', { class: 'q-hint', text: '[' + q.hint + ']' }) : null), ta);
+        card = h('div', { class: 'card q', 'data-code': q.code }, h('label', { class: 'q-text', for: 'q_' + q.code }, rich(q.text), q.hint ? h('span', { class: 'q-hint', text: '[' + q.hint + ']' }) : null), ta);
         card.read = () => (ta.value.trim() || q.optional) ? [{ code: q.code, value: ta.value.trim() }] : null;
       }
       cards.push(card);
@@ -444,7 +459,7 @@
       if (missing.length) { const others = missing.filter(c => !c.inline).length; bar.say(others ? U.missing(others) : '', 'bad'); missing[0].scrollIntoView({ block: 'center', behavior: 'smooth' }); const f = missing[0].querySelector('input[type=text]'); if (f && missing[0].inline) f.focus({ preventScroll: true }); return; }
       submit(state.stage, items, nextOf(state.stage), bar);
     });
-    if (D.heading || D.lead) app.append(h('div', { class: 'lead' }, D.heading ? h('p', { class: 'section-title', text: D.heading }) : null, D.lead ? h('p', { text: D.lead }) : null));
+    if (D.heading || D.lead) app.append(h('div', { class: 'lead' }, D.heading ? h('p', { class: 'section-title', text: D.heading }) : null, D.lead ? h('p', null, rich(D.lead)) : null));
     app.append(...cards, bar.el);
   }
 
