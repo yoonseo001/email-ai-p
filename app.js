@@ -377,7 +377,10 @@
   function exitView(T, url) {
     flushEvents(); closeLocal();
     const box = h('div', { class: 'card head' }, h('h1', { text: T.heading }), h('p', null, rich(T.body)));
-    if (url && !TEST && !PREVIEW) box.append(h('p', null, h('a', { class: 'btn', href: url, text: U.toProlific, style: 'display:inline-block;text-decoration:none' })));
+    if (url && !TEST && !PREVIEW) {
+      box.append(h('p', null, h('a', { class: 'btn', href: url, text: U.toProlific, style: 'display:inline-block;text-decoration:none' })));
+      setTimeout(() => { location.href = url; }, 3000); // 3초 뒤 자동으로 Prolific에 돌아간다 (탈락·비동의)
+    }
     app.append(box);
   }
 
