@@ -12,7 +12,7 @@ window.STUDY_CONFIG = {
   REWARD: "",         // 안내문에 들어갈 보상 금액. 예: "£1.50"  (비워 두면 "[amount]"로 보임)
 
   // Prolific에서 스터디를 만들 때 발급되는 주소. 비워 두면 Prolific으로 이동하지 않는다.
-  PROLIFIC_COMPLETE_URL: "",
-  PROLIFIC_SCREENOUT_URL: "",
-  PROLIFIC_NOCONSENT_URL: ""
+  PROLIFIC_COMPLETE_URL: "https://app.prolific.com/submissions/complete?cc=CEX2WTH1",
+  PROLIFIC_SCREENOUT_URL: "https://app.prolific.com/submissions/complete?cc=CEIB9EXT",
+  PROLIFIC_NOCONSENT_URL: "https://app.prolific.com/submissions/complete?cc=C1NCQS04"
 };
