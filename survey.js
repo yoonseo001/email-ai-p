@@ -22,7 +22,7 @@ window.SURVEY = {
 
   // One question per screen; choosing exitOn ends the survey
   screening: [
-    { code: "SQ1", text: "Are you 18 or older?", options: ["Yes", "No"], exitOn: "2" },
+    // SQ1 (18+) removed: all Prolific participants are verified 18+
     { code: "SQ2", text: "In the past 6 months, have you personally written and sent an email for work or school?", options: ["Yes", "No"], exitOn: "2" }
   ],
 
