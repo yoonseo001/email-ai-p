@@ -51,9 +51,10 @@ window.SURVEY = {
       "First, please review the previous emails from the speaker and a colleague from your training center. You will then use the provided draft and the AI writing assistance feature on the writing screen."
     ],
     guideHeading: "Task Instructions",
+    // A step written as [text, note] shows the note in small text under the step
     guideSteps: [
       "Read the task description and the two previous emails, and then click the 'Write Email' button.",
-      "Review the draft on the writing screen, and then click the AI writing assistance button.",
+      ["Review the draft on the writing screen, and then click the AI writing assistance button.", "Please imagine that you wrote this draft yourself."],
       "Read the AI suggestion shown in the body of the email, and then click the 'Apply and Edit' button. **You __must__ apply the AI suggestion once.**",
       "After applying it, feel free to edit or delete any part of the text to complete the email. You may also keep the AI-suggested content as it is.",
       "If needed, you can use 'View AI Suggestion Again,' 'View Original Draft,' and 'View 2 Previous Emails Again.'",
@@ -258,6 +259,7 @@ window.SURVEY = {
     toProlific: "Return to Prolific",
     closeOk: "Your answers have been saved. You may close this window.",
     progress: "Progress",
+    scaleTitle: "Response scale",
     noscript: "This survey requires JavaScript. Please enable JavaScript in your browser.",
     // researcher-only (visible only with ?test=1 or in preview)
     bannerPreview: "Preview mode · Responses are not saved.",

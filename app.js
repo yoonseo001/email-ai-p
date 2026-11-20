@@ -15,7 +15,7 @@
   const LEASE = KEY + ':lease';
   const app = document.getElementById('app');
   const LIKERT = S.likert.pages;
-  const STAGES = ['intro', ...S.screening.map((_, i) => 'sq' + (i + 1)), 'consent', 'task_intro', 'task', 'aq1',
+  const STAGES = ['intro', ...S.screening.map((_, i) => 'sq' + (i + 1)), 'consent', 'task_intro', 'task', 'aq1', 'survey_intro',
     ...LIKERT.map((_, i) => 's' + (i + 1)), 'mc', 'bq', 'dq', ...(BASE_MODE === 'pilot' ? ['pf'] : []), 'end'];
 
   let state = null, pageEnteredAt = Date.now(), finalRecord = null;
@@ -242,7 +242,7 @@
   function guideNodes(withScenario = true) {
     const T = S.taskIntro;
     return [withScenario && h('div', { class: 'scenario' }, T.scenarioHeading ? h('p', { class: 'section-title', text: T.scenarioHeading }) : null, paras(T.scenario)),
-      h('div', { class: 'guide', style: 'margin-top:18px' }, h('h2', { text: T.guideHeading }), h('ol', null, T.guideSteps.map(t => h('li', null, rich(t)))), h('p', { class: 'notes' }, T.guideNotes.map((t, i) => [i ? h('br') : null, rich(t)])))];
+      h('div', { class: 'guide', style: 'margin-top:18px' }, h('h2', { text: T.guideHeading }), h('ol', null, T.guideSteps.map(t => Array.isArray(t) ? h('li', null, rich(t[0]), h('span', { class: 'step-note' }, rich(t[1]))) : h('li', null, rich(t)))), h('p', { class: 'notes' }, T.guideNotes.map((t, i) => [i ? h('br') : null, rich(t)])))];
   }
 
   // ── 각 화면 ──────────────────────────────────────────────────
@@ -349,6 +349,17 @@
       app.append(again, h('div', { class: 'lead' }, h('p', null, rich(A.lead))), card, bar.el);
     },
 
+    // 설문 시작 안내: 한 화면에 안내문과 응답 척도를 보여 주고, 시작 버튼을 누르면 문항이 이어진다
+    survey_intro() {
+      const L = S.likert;
+      const bar = actions(U.start, () => submit('survey_intro', [], nextOf('survey_intro'), bar));
+      const scale = h('div', { class: 'scale-box' },
+        h('p', { class: 'scale-title', text: U.scaleTitle }),
+        h('div', { class: 'scale-ends' }, h('span', { text: L.scale[0] }), h('span', { class: 'lk-arrow' }, h('i')), h('span', { text: L.scale[L.scale.length - 1] })),
+        h('ol', { class: 'scale-list' }, L.scale.map((t, i) => h('li', null, h('b', { text: String(i + 1) }), h('span', { text: t })))));
+      app.append(h('div', { class: 'card head survey-intro' }, h('h2', { text: L.heading }), paras(L.lead), scale), bar.el);
+    },
+
     end() {
       const E = S.end, box = h('div', { class: 'card head' });
       app.append(box);
@@ -399,7 +410,9 @@
   function viewLikert() {
     const L = S.likert, pi = parseInt(state.stage.slice(1), 10) - 1, blocks = LIKERT[pi];
     let order = LIKERT.slice(0, pi).reduce((n, pg) => n + pg.reduce((m, b) => m + b.items.length, 0), 0);
-    const head = h('div', { class: 'lk-row lk-head', 'aria-hidden': 'true' }, h('span'), h('div', { class: 'lk-opts' }, L.scale.map((s, i) => h('span', { text: '①②③④⑤⑥⑦'[i] }))));
+    const head = h('div', { class: 'lk-row lk-head', 'aria-hidden': 'true' }, h('span'), h('div', { class: 'lk-scale' },
+      h('div', { class: 'lk-ends' }, h('span', { text: L.scale[0] }), h('span', { class: 'lk-arrow' }, h('i')), h('span', { text: L.scale[L.scale.length - 1] })),
+      h('div', { class: 'lk-opts' }, L.scale.map((s, i) => h('span', { text: String(i + 1) })))));
     const grid = h('div', { class: 'lk' }, head), rows = [];
     blocks.forEach((b, bi) => { if (b.lead) grid.append(h('div', { class: 'lk-row lk-lead' + (bi > 0 ? ' block-start' : '') }, h('span', null, rich(b.lead)))); b.items.forEach((text, ii) => {
       const code = b.single ? b.block : b.block + (ii + 1), name = 'q_' + code, ord = ++order;
@@ -417,8 +430,7 @@
       if (missing.length) { bar.say(U.missing(missing.length), 'bad'); missing[0].scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
       submit(state.stage, items, nextOf(state.stage), bar);
     });
-    app.append(h('div', { class: 'lead' }, h('p', { class: 'section-title', text: L.heading }), pi === 0 ? paras(L.lead) : null),
-      h('p', { class: 'scale-key', text: L.scale.map((s, i) => '①②③④⑤⑥⑦'[i] + ' ' + s).join('  ') }), grid, bar.el);
+    app.append(h('div', { class: 'lead' }, h('p', { class: 'section-title', text: L.heading })), grid, bar.el);
   }
 
   // 일반 문항 화면 (조작점검 · 이용 행태 · 인구통계 · 예비조사 의견)
