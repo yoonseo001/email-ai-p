@@ -14,7 +14,7 @@ window.SURVEY = {
     "Hello,",
     "The Graduate School of Information at Yonsei University is conducting research on users' experiences with generative AI email writing assistance. The purpose of this study is to examine how users behave and how they evaluate an AI feature when using it to write an email.",
     "If you choose to participate, you will complete an email-writing task using an AI feature in a hypothetical scenario and then complete a survey about your experience. The email you write will not actually be sent.",
-    "The study takes approximately **15 minutes to complete.** You will receive {reward} through Prolific for completing the study. Participation is voluntary, and you may stop at any time.",
+    "The study takes approximately **20 minutes to complete.** You will receive {reward} through Prolific for completing the study. Participation is voluntary, and you may stop at any time.",
     "If you have any questions about the study, please use the contact information below or send a message through Prolific.",
     "Thank you."
   ],

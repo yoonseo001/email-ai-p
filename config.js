@@ -9,7 +9,7 @@ window.STUDY_CONFIG = {
   MODE: "pilot",      // "pilot" = 파일럿, "main" = 본조사
   LANG: "en",
 
-  REWARD: "",         // 안내문에 들어갈 보상 금액. 예: "£1.50"  (비워 두면 "[amount]"로 보임)
+  REWARD: "$4.00",         // 안내문에 들어갈 보상 금액. 예: "£1.50"  (비워 두면 "[amount]"로 보임)
 
   // Prolific에서 스터디를 만들 때 발급되는 주소. 비워 두면 Prolific으로 이동하지 않는다.
   PROLIFIC_COMPLETE_URL: "https://app.prolific.com/submissions/complete?cc=CEX2WTH1",
