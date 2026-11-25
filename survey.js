@@ -4,7 +4,7 @@
 // To change any wording, edit this file only. "code" is the item code saved in the database; participants never see it.
 // ─────────────────────────────────────────────────────────────
 window.SURVEY = {
-  version: "survey-en-261119-p1",
+  version: "survey-en-261125-p2",
   lang: "en",
 
   title: "User Experience with AI-Assisted Email Writing",
@@ -179,10 +179,10 @@ window.SURVEY = {
     heading: "",
     lead: "The following questions are about the email writing task you just completed. Please answer based on the AI feature you used in this study.",
     questions: [
-      { code: "MC1", type: "single", text: "In this study, how did the AI feature you used mainly support your email writing?",
-        options: ["It revised or improved the existing sentences in the provided draft.", "It kept the existing sentences in the provided draft and added new content after them.", "I am not sure."] },
-      { code: "MC2", type: "single", text: "In this study, what information did the AI feature use to support your email writing?",
-        options: ["It used only the current email draft.", "It used the current email draft and the two previous emails.", "I am not sure."] }
+      { code: "MC1", type: "single", text: "Which best describes what happened when you applied the AI suggestion?",
+        options: ["The AI replaced the existing draft with a revised version.", "The AI kept the existing draft unchanged and added new sentences after it.", "I am not sure."] },
+      { code: "MC2", type: "single", text: "Which information did the AI use to generate its suggestion?",
+        options: ["The AI used only the current draft.", "The AI used the current draft and the two previous emails.", "I am not sure."] }
     ]
   },
 
